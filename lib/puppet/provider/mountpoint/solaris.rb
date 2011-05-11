@@ -12,7 +12,7 @@ Puppet::Type.type(:mountpoint).provide(:solaris, :parent => Puppet::Provider::Mo
     line = mount.split("\n").find do |line|
       File.expand_path(line.split.first) == File.expand_path(resource[:name])
     end
-    line =~ /^(\S+) on (\S+)/
-    {:name => $1, :device => $2}
+    line =~ /^(\S*) on (\S*)(?: (\S+))?/
+    {:name => $1, :device => $2, :options => $3}
   end
 end
