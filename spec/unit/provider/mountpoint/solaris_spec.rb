@@ -86,12 +86,24 @@ describe Puppet::Type.type(:mountpoint).provider(:solaris) do
   end
 
   describe "when options are specified" do
-    it "should pass the specified options to the mount command when mounting" do
-      resource[:options] = "devices,exec"
+    describe "as an array" do
+      it "should pass the specified options to the mount command when mounting" do
+        resource[:options] = [ "devices", "exec" ]
 
-      provider.expects(:mount).with("-o", "devices,exec", resource[:device], resource[:name])
+        provider.expects(:mount).with("-o", "devices,exec", resource[:device], resource[:name])
 
-      provider.create
+        provider.create
+      end
+    end
+
+    describe "as a comma separated string" do
+      it "should pass the specified options to the mount command when mounting" do
+        resource[:options] = "devices,exec"
+
+        provider.expects(:mount).with("-o", "devices,exec", resource[:device], resource[:name])
+
+        provider.create
+      end
     end
   end
 

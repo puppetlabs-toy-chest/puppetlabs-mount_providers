@@ -27,7 +27,12 @@ class Puppet::Provider::Mountpoint < Puppet::Provider
   private
 
   def mount_with_options(*args)
-    options = resource[:options] && resource[:options] != :absent ? ["-o", resource[:options]] : []
+    options = []
+    if resource[:options] && resource[:options] != :absent
+      options << '-o'
+      options << (resource[:options].is_a?(Array) ?  resource[:options].join(',') : resource[:options])
+    end
+
     mount(*(options + args))
   end
 
