@@ -9,7 +9,9 @@ module Puppet
       desc "The device providing the mount.  This can be whatever
         device is supporting by the mount, including network
         devices or devices specified by UUID rather than device
-        path, depending on the operating system."
+        path, depending on the operating system.  If you already have an entry
+        in your fstab (or you use the mounttab type to create such an entry),
+        it is generally not necessary to specify the fstype explicitly"
     end
 
     newparam(:name, :namevar => true) do
