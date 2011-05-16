@@ -12,15 +12,47 @@ module Puppet
         path, depending on the operating system.  If you already have an entry
         in your fstab (or you use the mounttab type to create such an entry),
         it is generally not necessary to specify the fstype explicitly"
+
+      validate do |value|
+        raise Puppet::Error, "device is not allowed to contain whitespace" if value =~ /\s/
+      end
+    end
+
+    newproperty(:fstype) do
+      desc "The mount type.  Valid values depend on the
+        operating system.  If you already have an entry in your fstab (or you use
+        the mounttab type to create such an entry), it is generally not necessary to
+        specify the fstype explicitly"
+
+      validate do |value|
+        raise Puppet::Error, "fstype is not allowed to contain whitespaces" if value =~ /\s/
+      end
     end
 
     newparam(:name, :namevar => true) do
       desc "The path to the mount point."
+
+      validate do |value|
+        raise Puppet::Error, "name is not allowed to contain whitespace" if value =~ /\s/
+        raise Puppet::Error, "name is not allowed to have trailing slashes" if value =~ %r{/$}
+        raise Puppet::Error, "name must be an absolute path" if value =~ %r{^[^/]} or value =~ %r{/../}
+      end
     end
 
     newparam(:options) do
       desc "Mount options for the mounts, as they would
         appear in the fstab."
+
+      validate do |value|
+        value = [value] unless value.is_a? Array
+        found_whitespace = false
+
+        value.each do |option|
+          found_whitespace = true if option =~ /\s/
+        end
+
+        raise Puppet::Error, "options cannot contain any spaces" if found_whitespace
+      end
     end
 
     newparam(:remounts) do
