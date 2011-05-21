@@ -64,6 +64,12 @@ module Puppet
         true
       end
 
+      defaultto do
+        if Facter.value(:operatingsystem) == "Solaris"
+          '-'
+        end
+      end
+
       validate do |value|
         raise Puppet::Error, "multiple options have to be specified as an array not a comma separated list" if value =~ /,/
         raise Puppet::Error, "option must not contain whitespace: #{value}" if value =~ /\s/
@@ -92,6 +98,9 @@ module Puppet
       newvalues :yes, :no
       aliasvalue :true, :yes
       aliasvalue :false, :no
+      defaultto do
+        :yes if resource.managed?
+      end
     end
 
     newproperty(:dump) do

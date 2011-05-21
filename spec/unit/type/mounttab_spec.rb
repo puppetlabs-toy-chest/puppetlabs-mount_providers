@@ -170,6 +170,11 @@ describe Puppet::Type.type(:mounttab) do
         proc { @class.new(:name => "/foo", :ensure => :present, :options => ['ro','foo bar','intr']) }.should raise_error Puppet::Error, /option.*whitespace/
       end
 
+      it "should default to - on Solaris" do
+        Facter.stubs(:value).with(:operatingsystem).returns 'Solaris'
+        @class.new(:name => "/foo", :ensure => :present)[:options].should == "-"
+      end
+
     end
 
     describe "for pass" do
@@ -251,6 +256,10 @@ describe Puppet::Type.type(:mounttab) do
 
       it "should not support other values for atboot" do
         proc { @class.new(:name => "/foo", :ensure => :present, :atboot => :please_dont) }.should raise_error Puppet::Error, /Invalid value/
+      end
+
+      it "should default to yes" do
+        @class.new(:name => "/foo", :ensure => :present)[:atboot].should == :yes
       end
 
     end

@@ -33,7 +33,7 @@ class Puppet::Provider::Mountpoint < Puppet::Provider
       options << (resource[:options].is_a?(Array) ?  resource[:options].join(',') : resource[:options])
     end
 
-    mount(*(options + args))
+    mount(*(options + args.compact))
   end
 
   def entry

@@ -173,6 +173,22 @@ describe Puppet::Type.type(:mountpoint).provider(:solaris) do
         @catalog.apply
       end
 
+      it "should pass only one argument to mount if device is not specified" do
+        pending "Can't figure out the right way to test this atm; needs to be fixed"
+        deviceless_resource = Puppet::Type.type(:mountpoint).new :ensure => :present, :name => "/mountdir"
+        deviceless_provider = described_class.new(deviceless_resource)
+        deviceless_provider.stubs(:mount).returns <<-MOUNT_OUTPUT.gsub(/^\s+/, '')
+          / on rpool/ROOT/opensolaris read/write/setuid/devices/dev=2d90002 on Wed Dec 31 16:00:00 1969
+          /dev on /dev read/write/setuid/devices/dev=4a40000 on Mon May  2 10:41:43 2011
+          /proc on proc read/write/setuid/devices/dev=4b00000 on Mon May  2 10:41:43 2011
+        MOUNT_OUTPUT
+        deviceless_catalog = Puppet::Resource::Catalog.new
+        deviceless_catalog.add_resource(deviceless_resource)
+        
+        deviceless_provider.expects(:mount).with("/mountdir").once
+        deviceless_catalog.apply
+      end
+
       it "should do nothing if ensure is absent" do
         resource[:ensure] = :absent
         resource.provider.expects(:unmount).never
