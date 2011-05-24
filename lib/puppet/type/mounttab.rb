@@ -144,5 +144,8 @@ module Puppet
       end
     end
 
+    validate do
+      self.fail "You must specify the fstype" if self[:fstype].nil?
+    end
   end
 end

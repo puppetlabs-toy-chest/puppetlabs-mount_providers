@@ -34,50 +34,50 @@ describe Puppet::Type.type(:mounttab) do
   describe "when validating values" do
     describe "for name" do
       it "should support absolute paths" do
-        proc { @class.new(:name => "/foo", :ensure => :present) }.should_not raise_error
+        proc { @class.new(:name => "/foo", :ensure => :present, :fstype => 'foo') }.should_not raise_error
       end
 
       it "should not support whitespace" do
-        proc { @class.new(:name => "/foo bar", :ensure => :present) }.should raise_error(Puppet::Error, /name.*whitespace/)
+        proc { @class.new(:name => "/foo bar", :ensure => :present, :fstype => 'foo') }.should raise_error(Puppet::Error, /name.*whitespace/)
       end
 
       it "should not allow trailing slashes" do
-        proc { @class.new(:name => "/foo/", :ensure => :present) }.should raise_error(Puppet::Error, /mount should be specified without a trailing slash/)
-        proc { @class.new(:name => "/foo//", :ensure => :present) }.should raise_error(Puppet::Error, /mount should be specified without a trailing slash/)
+        proc { @class.new(:name => "/foo/", :ensure => :present, :fstype => 'foo') }.should raise_error(Puppet::Error, /mount should be specified without a trailing slash/)
+        proc { @class.new(:name => "/foo//", :ensure => :present, :fstype => 'foo') }.should raise_error(Puppet::Error, /mount should be specified without a trailing slash/)
       end
     end
 
     describe "for ensure" do
       it "should support present as a value for ensure" do
-        proc { @class.new(:name => "/foo", :ensure => :present) }.should_not raise_error
+        proc { @class.new(:name => "/foo", :ensure => :present, :fstype => 'foo') }.should_not raise_error
       end
 
       it "should support absent as a value for ensure" do
-        proc { @class.new(:name => "/foo", :ensure => :absent) }.should_not raise_error
+        proc { @class.new(:name => "/foo", :ensure => :absent, :fstype => 'foo') }.should_not raise_error
       end
     end
 
     describe "for device" do
       it "should support normal /dev paths for device" do
-        proc { @class.new(:name => "/foo", :ensure => :present, :device => '/dev/hda1') }.should_not raise_error
-        proc { @class.new(:name => "/foo", :ensure => :present, :device => '/dev/dsk/c0d0s0') }.should_not raise_error
+        proc { @class.new(:name => "/foo", :ensure => :present, :device => '/dev/hda1', :fstype => 'foo') }.should_not raise_error
+        proc { @class.new(:name => "/foo", :ensure => :present, :device => '/dev/dsk/c0d0s0', :fstype => 'foo') }.should_not raise_error
       end
 
       it "should support labels for device" do
-        proc { @class.new(:name => "/foo", :ensure => :present, :device => 'LABEL=/boot') }.should_not raise_error
-        proc { @class.new(:name => "/foo", :ensure => :present, :device => 'LABEL=SWAP-hda6') }.should_not raise_error
+        proc { @class.new(:name => "/foo", :ensure => :present, :device => 'LABEL=/boot', :fstype => 'foo') }.should_not raise_error
+        proc { @class.new(:name => "/foo", :ensure => :present, :device => 'LABEL=SWAP-hda6', :fstype => 'foo') }.should_not raise_error
       end
 
       it "should support pseudo devices for device" do
-        proc { @class.new(:name => "/foo", :ensure => :present, :device => 'ctfs') }.should_not raise_error
-        proc { @class.new(:name => "/foo", :ensure => :present, :device => 'swap') }.should_not raise_error
-        proc { @class.new(:name => "/foo", :ensure => :present, :device => 'sysfs') }.should_not raise_error
-        proc { @class.new(:name => "/foo", :ensure => :present, :device => 'proc') }.should_not raise_error
+        proc { @class.new(:name => "/foo", :ensure => :present, :device => 'ctfs', :fstype => 'foo') }.should_not raise_error
+        proc { @class.new(:name => "/foo", :ensure => :present, :device => 'swap', :fstype => 'foo') }.should_not raise_error
+        proc { @class.new(:name => "/foo", :ensure => :present, :device => 'sysfs', :fstype => 'foo') }.should_not raise_error
+        proc { @class.new(:name => "/foo", :ensure => :present, :device => 'proc', :fstype => 'foo') }.should_not raise_error
       end
 
       it "should not support whitespace in device" do
-        proc { @class.new(:name => "/foo", :ensure => :present, :device => '/dev/my dev/foo') }.should raise_error(Puppet::Error, /device.*whitespace/)
-        proc { @class.new(:name => "/foo", :ensure => :present, :device => "/dev/my\tdev/foo") }.should raise_error(Puppet::Error, /device.*whitespace/)
+        proc { @class.new(:name => "/foo", :ensure => :present, :device => '/dev/my dev/foo', :fstype => 'foo') }.should raise_error(Puppet::Error, /device.*whitespace/)
+        proc { @class.new(:name => "/foo", :ensure => :present, :device => "/dev/my\tdev/foo", :fstype => 'foo') }.should raise_error(Puppet::Error, /device.*whitespace/)
       end
 
     end
@@ -89,11 +89,11 @@ describe Puppet::Type.type(:mounttab) do
       end
 
       it "should support normal /dev/rdsk paths for blockdevice" do
-        proc { @class.new(:name => "/foo", :ensure => :present, :blockdevice => '/dev/rdsk/c0d0s0') }.should_not raise_error
+        proc { @class.new(:name => "/foo", :ensure => :present, :blockdevice => '/dev/rdsk/c0d0s0', :fstype => 'foo') }.should_not raise_error
       end
 
       it "should support a dash for blockdevice" do
-        proc { @class.new(:name => "/foo", :ensure => :present, :blockdevice => '-') }.should_not raise_error
+        proc { @class.new(:name => "/foo", :ensure => :present, :blockdevice => '-', :fstype => 'foo') }.should_not raise_error
       end
 
       it "should not support whitespace in blockdevice" do
@@ -102,7 +102,7 @@ describe Puppet::Type.type(:mounttab) do
       end
 
       it "should default to /dev/rdsk/DEVICE if device is /dev/dsk/DEVICE" do
-        obj = @class.new(:name => "/foo", :device => '/dev/dsk/c0d0s0')
+        obj = @class.new(:name => "/foo", :device => '/dev/dsk/c0d0s0', :fstype => 'foo')
         obj[:blockdevice].should == '/dev/rdsk/c0d0s0'
       end
 
@@ -112,12 +112,12 @@ describe Puppet::Type.type(:mounttab) do
       end
 
       it "should have no default otherwise" do
-        @class.new(:name => "/foo")[:blockdevice].should == nil
-        @class.new(:name => "/foo", :device => "/foo")[:blockdevice].should == nil
+        @class.new(:name => "/foo", :fstype => 'foo')[:blockdevice].should == nil
+        @class.new(:name => "/foo", :device => "/foo", :fstype => 'foo')[:blockdevice].should == nil
       end
 
       it "should overwrite any default if blockdevice is explicitly set" do
-        @class.new(:name => "/foo", :device => '/dev/dsk/c0d0s0', :blockdevice => '/foo')[:blockdevice].should == '/foo'
+        @class.new(:name => "/foo", :device => '/dev/dsk/c0d0s0', :blockdevice => '/foo', :fstype => 'foo')[:blockdevice].should == '/foo'
         @class.new(:name => "/foo", :device => "server://share", :fstype => 'nfs', :blockdevice => '/foo')[:blockdevice].should == '/foo'
       end
 
@@ -139,20 +139,23 @@ describe Puppet::Type.type(:mounttab) do
         proc { @class.new(:name => "/foo", :ensure => :present, :fstype => 'ext 3') }.should raise_error(Puppet::Error, /fstype.*whitespace/)
       end
 
+      it 'should require fstype be set' do
+        proc { @class.new(:name => "/foo", :ensure => :present) }.should raise_error(Puppet::Error, /You must specify the fstype/)
+      end
     end
 
     describe "for options" do
 
       it "should support a single option" do
-         proc { @class.new(:name => "/foo", :ensure => :present, :options => 'ro') }.should_not raise_error
+         proc { @class.new(:name => "/foo", :ensure => :present, :options => 'ro', :fstype => 'foo') }.should_not raise_error
       end
 
       it "should support muliple options as an array" do
-        proc { @class.new(:name => "/foo", :ensure => :present, :options => ['ro','rsize=4096']) }.should_not raise_error
+        proc { @class.new(:name => "/foo", :ensure => :present, :options => ['ro','rsize=4096'], :fstype => 'foo') }.should_not raise_error
       end
 
       it "should support an empty array as options" do
-        proc { @class.new(:name => "/foo", :ensure => :present, :options => []) }.should_not raise_error
+        proc { @class.new(:name => "/foo", :ensure => :present, :options => [], :fstype => 'foo') }.should_not raise_error
       end
 
       it "should not support a comma separated option" do
@@ -165,7 +168,7 @@ describe Puppet::Type.type(:mounttab) do
 
       it "should default to - on Solaris" do
         Facter.stubs(:value).with(:operatingsystem).returns 'Solaris'
-        @class.new(:name => "/foo", :ensure => :present)[:options].should == "-"
+        @class.new(:name => "/foo", :ensure => :present, :fstype => 'foo')[:options].should == "-"
       end
 
     end
@@ -173,24 +176,24 @@ describe Puppet::Type.type(:mounttab) do
     describe "for pass" do
 
       it "should support numeric values" do
-        proc { @class.new(:name => "/foo", :ensure => :present, :pass => '0') }.should_not raise_error
-        proc { @class.new(:name => "/foo", :ensure => :present, :pass => '1') }.should_not raise_error
-        proc { @class.new(:name => "/foo", :ensure => :present, :pass => '2') }.should_not raise_error
+        proc { @class.new(:name => "/foo", :ensure => :present, :pass => '0', :fstype => 'foo') }.should_not raise_error
+        proc { @class.new(:name => "/foo", :ensure => :present, :pass => '1', :fstype => 'foo') }.should_not raise_error
+        proc { @class.new(:name => "/foo", :ensure => :present, :pass => '2', :fstype => 'foo') }.should_not raise_error
       end
 
       it "should support - on Solaris" do
         Facter.stubs(:value).with(:operatingsystem).returns 'Solaris'
-        proc { @class.new(:name => "/foo", :ensure => :present, :pass => '-') }.should_not raise_error
+        proc { @class.new(:name => "/foo", :ensure => :present, :pass => '-', :fstype => 'foo') }.should_not raise_error
       end
 
       it "should default to 0 on non Solaris" do
         Facter.stubs(:value).with(:operatingsystem).returns 'HP-UX'
-        @class.new(:name => "/foo", :ensure => :present)[:pass].should == 0
+        @class.new(:name => "/foo", :ensure => :present, :fstype => 'foo')[:pass].should == 0
       end
 
       it "should default to - on Solaris" do
         Facter.stubs(:value).with(:operatingsystem).returns 'Solaris'
-        @class.new(:name => "/foo", :ensure => :present)[:pass].should == '-'
+        @class.new(:name => "/foo", :ensure => :present, :fstype => 'foo')[:pass].should == '-'
       end
 
     end
@@ -198,25 +201,25 @@ describe Puppet::Type.type(:mounttab) do
     describe "for dump" do
 
       it "should support 0 as a value for dump" do
-        proc { @class.new(:name => "/foo", :ensure => :present, :dump => '0') }.should_not raise_error
+        proc { @class.new(:name => "/foo", :ensure => :present, :dump => '0', :fstype => 'foo') }.should_not raise_error
       end
 
       it "should support 1 as a value for dump" do
-        proc { @class.new(:name => "/foo", :ensure => :present, :dump => '1') }.should_not raise_error
+        proc { @class.new(:name => "/foo", :ensure => :present, :dump => '1', :fstype => 'foo') }.should_not raise_error
       end
 
       # stefan: Looks like I'm unable to stub facter here
       it "should support 2 as a value for dump on FreeBSD", :if => Facter.value(:operatingsystem) == 'FreeBSD' do
-        proc { @class.new(:name => "/foo", :ensure => :present, :dump => '2') }.should_not raise_error
+        proc { @class.new(:name => "/foo", :ensure => :present, :dump => '2', :fstype => 'foo') }.should_not raise_error
       end
 
       # stefan: Looks like I'm unable to stub facter here
       it "should not support 2 as a value for dump when not on FreeBSD", :if => Facter.value(:operatingsystem) != 'FreeBSD' do
-        proc { @class.new(:name => "/foo", :ensure => :present, :dump => '2') }.should raise_error(Puppet::Error, /Invalid value/)
+        proc { @class.new(:name => "/foo", :ensure => :present, :dump => '2', :fstype => 'foo') }.should raise_error(Puppet::Error, /Invalid value/)
       end
 
       it "should default to 0" do
-        @class.new(:name => "/foo", :ensure => :present)[:dump].should == 0
+        @class.new(:name => "/foo", :ensure => :present, :fstype => 'foo')[:dump].should == 0
       end
 
     end
@@ -224,27 +227,27 @@ describe Puppet::Type.type(:mounttab) do
     describe "for atboot" do
 
       it "should support true as a value for atboot" do
-        proc { @class.new(:name => "/foo", :ensure => :present, :atboot => :true) }.should_not raise_error
+        proc { @class.new(:name => "/foo", :ensure => :present, :atboot => :true, :fstype => 'foo') }.should_not raise_error
       end
 
       it "should support false as a value for atboot" do
-        proc { @class.new(:name => "/foo", :ensure => :present, :atboot => :false) }.should_not raise_error
+        proc { @class.new(:name => "/foo", :ensure => :present, :atboot => :false, :fstype => 'foo') }.should_not raise_error
       end
 
       it "should support yes as a value for atboot" do
-        proc { @class.new(:name => "/foo", :ensure => :present, :atboot => :yes) }.should_not raise_error
+        proc { @class.new(:name => "/foo", :ensure => :present, :atboot => :yes, :fstype => 'foo') }.should_not raise_error
       end
 
       it "should support no as a value for atboot" do
-        proc { @class.new(:name => "/foo", :ensure => :present, :atboot => :no) }.should_not raise_error
+        proc { @class.new(:name => "/foo", :ensure => :present, :atboot => :no, :fstype => 'foo') }.should_not raise_error
       end
 
       it "should alias true to yes" do
-        @class.new(:name => "/foo", :ensure => :present, :atboot => :true)[:atboot].should == :yes
+        @class.new(:name => "/foo", :ensure => :present, :atboot => :true, :fstype => 'foo')[:atboot].should == :yes
       end
 
       it "should alias false to no" do
-        @class.new(:name => "/foo", :ensure => :present, :atboot => :false)[:atboot].should == :no
+        @class.new(:name => "/foo", :ensure => :present, :atboot => :false, :fstype => 'foo')[:atboot].should == :no
       end
 
       it "should not support other values for atboot" do
@@ -252,7 +255,7 @@ describe Puppet::Type.type(:mounttab) do
       end
 
       it "should default to yes" do
-        @class.new(:name => "/foo", :ensure => :present)[:atboot].should == :yes
+        @class.new(:name => "/foo", :ensure => :present, :fstype => 'foo')[:atboot].should == :yes
       end
 
     end
