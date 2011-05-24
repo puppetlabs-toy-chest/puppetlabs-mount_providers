@@ -86,7 +86,6 @@ describe Puppet::Type.type(:mounttab) do
     end
 
     describe "for blockdevice" do
-
       before :each do
         Facter.stubs(:value).with(:operatingsystem).returns 'Solaris'
       end
@@ -123,11 +122,9 @@ describe Puppet::Type.type(:mounttab) do
         @class.new(:name => "/foo", :device => '/dev/dsk/c0d0s0', :blockdevice => '/foo', :fstype => 'foo')[:blockdevice].should == '/foo'
         @class.new(:name => "/foo", :device => "server://share", :fstype => 'nfs', :blockdevice => '/foo')[:blockdevice].should == '/foo'
       end
-
     end
 
     describe "for fstype" do
-
       it "should support valid fstypes" do
         proc { @class.new(:name => "/foo", :ensure => :present, :fstype => 'ext3', :device => '/dev/dsk/c0t0d0s0') }.should_not raise_error
         proc { @class.new(:name => "/foo", :ensure => :present, :fstype => 'proc', :device => '/dev/dsk/c0t0d0s0') }.should_not raise_error
@@ -148,7 +145,6 @@ describe Puppet::Type.type(:mounttab) do
     end
 
     describe "for options" do
-
       it "should support a single option" do
          proc { @class.new(:name => "/foo", :ensure => :present, :options => 'ro', :fstype => 'foo', :device => '/dev/dsk/c0t0d0s0') }.should_not raise_error
       end
@@ -173,11 +169,9 @@ describe Puppet::Type.type(:mounttab) do
         Facter.stubs(:value).with(:operatingsystem).returns 'Solaris'
         @class.new(:name => "/foo", :ensure => :present, :fstype => 'foo', :device => '/dev/dsk/c0t0d0s0')[:options].should == "-"
       end
-
     end
 
     describe "for pass" do
-
       it "should support numeric values" do
         proc { @class.new(:name => "/foo", :ensure => :present, :pass => '0', :fstype => 'foo', :device => '/dev/dsk/c0t0d0s0') }.should_not raise_error
         proc { @class.new(:name => "/foo", :ensure => :present, :pass => '1', :fstype => 'foo', :device => '/dev/dsk/c0t0d0s0') }.should_not raise_error
@@ -198,11 +192,9 @@ describe Puppet::Type.type(:mounttab) do
         Facter.stubs(:value).with(:operatingsystem).returns 'Solaris'
         @class.new(:name => "/foo", :ensure => :present, :fstype => 'foo', :device => '/dev/dsk/c0t0d0s0')[:pass].should == '-'
       end
-
     end
 
     describe "for dump" do
-
       it "should support 0 as a value for dump" do
         proc { @class.new(:name => "/foo", :ensure => :present, :dump => '0', :fstype => 'foo', :device => '/dev/dsk/c0t0d0s0') }.should_not raise_error
       end
@@ -224,11 +216,9 @@ describe Puppet::Type.type(:mounttab) do
       it "should default to 0" do
         @class.new(:name => "/foo", :ensure => :present, :fstype => 'foo', :device => '/dev/dsk/c0t0d0s0')[:dump].should == 0
       end
-
     end
 
     describe "for atboot" do
-
       it "should support true as a value for atboot" do
         proc { @class.new(:name => "/foo", :ensure => :present, :atboot => :true, :fstype => 'foo', :device => '/dev/dsk/c0t0d0s0') }.should_not raise_error
       end
@@ -260,13 +250,10 @@ describe Puppet::Type.type(:mounttab) do
       it "should default to yes" do
         @class.new(:name => "/foo", :ensure => :present, :fstype => 'foo', :device => '/dev/dsk/c0t0d0s0')[:atboot].should == :yes
       end
-
     end
-
   end
 
   describe "when syncing options" do
-
     before :each do
       @options = @class.attrclass(:options).new(:resource => @resource, :should => %w{rw rsize=2048 wsize=2048})
     end
@@ -297,7 +284,5 @@ describe Puppet::Type.type(:mounttab) do
       @options.insync?(%w{wsize=2048 rsize=2048 rw}).should == true
       @options.insync?(%w{rw rsize=2048 wsize=2048}).should == true
     end
-
   end
-
 end
