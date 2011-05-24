@@ -11,7 +11,8 @@ module Puppet
       desc "The device providing the mount.  This can be whatever
         device is supporting by the mount, including network
         devices or devices specified by UUID rather than device
-        path, depending on the operating system."
+        path, depending on the operating system.  This is a required
+        option."
 
       validate do |value|
         raise Puppet::Error, "device must not contain whitespace: #{value}" if value =~ /\s/
@@ -146,6 +147,7 @@ module Puppet
 
     validate do
       self.fail "You must specify the fstype" if self[:fstype].nil?
+      self.fail "You must specify the device" if self[:device].nil?
     end
   end
 end
