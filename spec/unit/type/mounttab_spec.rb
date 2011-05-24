@@ -3,7 +3,6 @@
 require 'spec_helper'
 
 describe Puppet::Type.type(:mounttab) do
-
   before do
     @class = described_class
     @provider_class = @class.provide(:fake) { mk_resource_methods }
@@ -19,7 +18,6 @@ describe Puppet::Type.type(:mounttab) do
   end
 
   describe "when validating attributes" do
-
     [:name, :provider].each do |param|
       it "should have a #{param} parameter" do
         @class.attrtype(param).should == :param
@@ -31,13 +29,10 @@ describe Puppet::Type.type(:mounttab) do
         @class.attrtype(param).should == :property
       end
     end
-
   end
 
   describe "when validating values" do
-
     describe "for name" do
-
       it "should support absolute paths" do
         proc { @class.new(:name => "/foo", :ensure => :present) }.should_not raise_error
       end
@@ -50,7 +45,6 @@ describe Puppet::Type.type(:mounttab) do
         proc { @class.new(:name => "/foo/", :ensure => :present) }.should raise_error(Puppet::Error, /mount should be specified without a trailing slash/)
         proc { @class.new(:name => "/foo//", :ensure => :present) }.should raise_error(Puppet::Error, /mount should be specified without a trailing slash/)
       end
-
     end
 
     describe "for ensure" do
@@ -64,7 +58,6 @@ describe Puppet::Type.type(:mounttab) do
     end
 
     describe "for device" do
-
       it "should support normal /dev paths for device" do
         proc { @class.new(:name => "/foo", :ensure => :present, :device => '/dev/hda1') }.should_not raise_error
         proc { @class.new(:name => "/foo", :ensure => :present, :device => '/dev/dsk/c0d0s0') }.should_not raise_error
@@ -83,8 +76,8 @@ describe Puppet::Type.type(:mounttab) do
       end
 
       it "should not support whitespace in device" do
-        proc { @class.new(:name => "/foo", :ensure => :present, :device => '/dev/my dev/foo') }.should raise_error Puppet::Error, /device.*whitespace/
-        proc { @class.new(:name => "/foo", :ensure => :present, :device => "/dev/my\tdev/foo") }.should raise_error Puppet::Error, /device.*whitespace/
+        proc { @class.new(:name => "/foo", :ensure => :present, :device => '/dev/my dev/foo') }.should raise_error(Puppet::Error, /device.*whitespace/)
+        proc { @class.new(:name => "/foo", :ensure => :present, :device => "/dev/my\tdev/foo") }.should raise_error(Puppet::Error, /device.*whitespace/)
       end
 
     end
@@ -104,8 +97,8 @@ describe Puppet::Type.type(:mounttab) do
       end
 
       it "should not support whitespace in blockdevice" do
-        proc { @class.new(:name => "/foo", :ensure => :present, :blockdevice => '/dev/my dev/foo') }.should raise_error Puppet::Error, /blockdevice.*whitespace/
-        proc { @class.new(:name => "/foo", :ensure => :present, :blockdevice => "/dev/my\tdev/foo") }.should raise_error Puppet::Error, /blockdevice.*whitespace/
+        proc { @class.new(:name => "/foo", :ensure => :present, :blockdevice => '/dev/my dev/foo') }.should raise_error(Puppet::Error, /blockdevice.*whitespace/)
+        proc { @class.new(:name => "/foo", :ensure => :present, :blockdevice => "/dev/my\tdev/foo") }.should raise_error(Puppet::Error, /blockdevice.*whitespace/)
       end
 
       it "should default to /dev/rdsk/DEVICE if device is /dev/dsk/DEVICE" do
@@ -143,7 +136,7 @@ describe Puppet::Type.type(:mounttab) do
       end
 
       it "should not support whitespace in fstype" do
-        proc { @class.new(:name => "/foo", :ensure => :present, :fstype => 'ext 3') }.should raise_error Puppet::Error, /fstype.*whitespace/
+        proc { @class.new(:name => "/foo", :ensure => :present, :fstype => 'ext 3') }.should raise_error(Puppet::Error, /fstype.*whitespace/)
       end
 
     end
@@ -163,11 +156,11 @@ describe Puppet::Type.type(:mounttab) do
       end
 
       it "should not support a comma separated option" do
-        proc { @class.new(:name => "/foo", :ensure => :present, :options => ['ro','foo,bar','intr']) }.should raise_error Puppet::Error, /option.*have to be specified as an array/
+        proc { @class.new(:name => "/foo", :ensure => :present, :options => ['ro','foo,bar','intr']) }.should raise_error(Puppet::Error, /option.*have to be specified as an array/)
       end
 
       it "should not support blanks in options" do
-        proc { @class.new(:name => "/foo", :ensure => :present, :options => ['ro','foo bar','intr']) }.should raise_error Puppet::Error, /option.*whitespace/
+        proc { @class.new(:name => "/foo", :ensure => :present, :options => ['ro','foo bar','intr']) }.should raise_error(Puppet::Error, /option.*whitespace/)
       end
 
       it "should default to - on Solaris" do
@@ -219,7 +212,7 @@ describe Puppet::Type.type(:mounttab) do
 
       # stefan: Looks like I'm unable to stub facter here
       it "should not support 2 as a value for dump when not on FreeBSD", :if => Facter.value(:operatingsystem) != 'FreeBSD' do
-        proc { @class.new(:name => "/foo", :ensure => :present, :dump => '2') }.should raise_error Puppet::Error, /Invalid value/
+        proc { @class.new(:name => "/foo", :ensure => :present, :dump => '2') }.should raise_error(Puppet::Error, /Invalid value/)
       end
 
       it "should default to 0" do
