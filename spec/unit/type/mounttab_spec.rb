@@ -203,14 +203,16 @@ describe Puppet::Type.type(:mounttab) do
         proc { @class.new(:name => "/foo", :ensure => :present, :dump => '1', :fstype => 'foo', :device => '/dev/dsk/c0t0d0s0') }.should_not raise_error
       end
 
-      # stefan: Looks like I'm unable to stub facter here
-      it "should support 2 as a value for dump on FreeBSD", :if => Facter.value(:operatingsystem) == 'FreeBSD' do
-        proc { @class.new(:name => "/foo", :ensure => :present, :dump => '2', :fstype => 'foo', :device => '/dev/dsk/c0t0d0s0') }.should_not raise_error
+      it "should support 2 as a value for dump on FreeBSD" do
+        Facter.stubs(:value).with(:operatingsystem).returns 'FreeBSD'
+
+        expect { @class.new(:name => "/foo", :ensure => :present, :dump => '2', :fstype => 'foo', :device => '/dev/dsk/c0t0d0s0') }.to_not raise_error
       end
 
-      # stefan: Looks like I'm unable to stub facter here
-      it "should not support 2 as a value for dump when not on FreeBSD", :if => Facter.value(:operatingsystem) != 'FreeBSD' do
-        proc { @class.new(:name => "/foo", :ensure => :present, :dump => '2', :fstype => 'foo') }.should raise_error(Puppet::Error, /Invalid value/)
+      it "should not support 2 as a value for dump when not on FreeBSD" do
+        Facter.stubs(:value).with(:operatingsystem).returns 'Linux'
+
+        proc { @class.new(:name => "/foo", :ensure => :present, :dump => '2', :fstype => 'foo', :device => '/dev/dsk/c0t0d0s0') }.should raise_error(Puppet::Error, /2 is only valid on FreeBSD/)
       end
 
       it "should default to 0" do

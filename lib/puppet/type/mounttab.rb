@@ -106,18 +106,17 @@ module Puppet
 
     newproperty(:dump) do
       desc "Whether to dump the mount.  Not all platform support this.
-        Valid values are `1` or `0`. or `2` on FreeBSD, Default is `0`."
+        Valid values are `1` or `0` (and `2` on FreeBSD).  The default is `0`."
 
-      if Facter.value(:operatingsystem) == "FreeBSD"
-        newvalue(%r{(0|1|2)})
-      else
-        newvalue(%r{(0|1)})
-      end
+      newvalue(/^[012]$/)
 
       defaultto do
         0 if resource.managed?
       end
 
+      validate do |value|
+        self.fail("2 is only valid on FreeBSD") if Facter.value(:operatingsystem) != 'FreeBSD' && value == '2'
+      end
     end
 
     newproperty(:target) do
