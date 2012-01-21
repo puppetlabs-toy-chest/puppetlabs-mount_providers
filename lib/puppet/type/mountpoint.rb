@@ -1,5 +1,8 @@
 module Puppet
   newtype(:mountpoint) do
+    @doc = "Manages currently mounted volumes, i.e. the live state of the filesystem.
+See the discussion under the mounttab type for usage."
+
     feature :refreshable, "The provider can remount the filesystem.",
       :methods => [:remount]
 
