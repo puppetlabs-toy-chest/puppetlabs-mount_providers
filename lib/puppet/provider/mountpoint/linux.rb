@@ -5,6 +5,7 @@ Puppet::Type.type(:mountpoint).provide(:linux, :parent => Puppet::Provider::Moun
   commands :mount => "mount", :unmount => "umount"
 
   confine :kernel => :linux
+  defaultfor :kernel => :linux
 
   private
 

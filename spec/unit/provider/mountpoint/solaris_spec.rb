@@ -1,11 +1,16 @@
-#!/usr/bin/env rspec
+#!/usr/bin/env ruby -S rspec
 
 require 'spec_helper'
 require 'puppet/provider/mountpoint/solaris'
 
 describe Puppet::Type.type(:mountpoint).provider(:solaris) do
   let(:resource) do
-    Puppet::Type.type(:mountpoint).new :ensure => :present, :name => "/mountdir", :device => "/device"
+    Puppet::Type.type(:mountpoint).new(
+      :ensure   => :present,
+      :name     => "/mountdir",
+      :device   => "/device",
+      :provider => :solaris
+    )
   end
 
   let(:provider) do
