@@ -61,7 +61,7 @@ describe Puppet::Type.type(:mountpoint).provider(:linux) do
         /dev/cciss/c0d0p1 on /boot type ext3 (rw)
         tmpfs on /dev/shm type tmpfs (rw)
         none on /proc/sys/fs/binfmt_misc type binfmt_misc (rw)
-        /device on /wrongmountdir type ext3 (rw)
+        /wrongdevice on /mountdir type ext3 (rw)
       MOUNT_OUTPUT
 
       provider.should be_exists
