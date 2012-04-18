@@ -5,6 +5,7 @@ Puppet::Type.type(:mountpoint).provide(:solaris, :parent => Puppet::Provider::Mo
   commands :mount => "mount", :unmount => "umount"
 
   confine :operatingsystem => :solaris
+  defaultfor :operatingsystem => :solaris
 
   private
 

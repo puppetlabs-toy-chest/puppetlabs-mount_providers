@@ -1,11 +1,16 @@
-#!/usr/bin/env rspec
+#!/usr/bin/env ruby -S rspec
 
 require 'spec_helper'
 require 'puppet/provider/mountpoint/linux'
 
 describe Puppet::Type.type(:mountpoint).provider(:linux) do
   let(:resource) do
-    Puppet::Type.type(:mountpoint).new :ensure => :present, :name => "/mountdir", :device => "/device"
+    Puppet::Type.type(:mountpoint).new(
+      :ensure   => :present,
+      :name     => "/mountdir",
+      :device   => "/device",
+      :provider => :linux
+    )
   end
 
   let(:provider) do
@@ -56,7 +61,7 @@ describe Puppet::Type.type(:mountpoint).provider(:linux) do
         /dev/cciss/c0d0p1 on /boot type ext3 (rw)
         tmpfs on /dev/shm type tmpfs (rw)
         none on /proc/sys/fs/binfmt_misc type binfmt_misc (rw)
-        /device on /wrongmountdir type ext3 (rw)
+        /wrongdevice on /mountdir type ext3 (rw)
       MOUNT_OUTPUT
 
       provider.should be_exists
