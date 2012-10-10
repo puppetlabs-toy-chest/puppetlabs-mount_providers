@@ -1,4 +1,4 @@
-#!/usr/bin/env ruby -S rspec
+#!/usr/bin/env ruby
 
 require 'spec_helper'
 require 'puppet/provider/mountpoint/linux'
@@ -20,6 +20,13 @@ describe Puppet::Type.type(:mountpoint).provider(:linux) do
   before :each do
     described_class.expects(:execute).never
     described_class.stubs(:suitable?).returns(true)
+  end
+
+  describe "#handle_notification" do
+    it "handles refresh events sent to the type" do
+      resource.provider.expects(:handle_notification).once
+      resource.refresh
+    end
   end
 
   describe "#exists?" do
