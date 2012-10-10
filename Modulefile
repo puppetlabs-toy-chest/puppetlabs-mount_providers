@@ -1,5 +1,5 @@
 name    'puppetlabs-mount_providers'
-version '0.0.1'
+version '0.0.2'
 source 'git://github.com/puppetlabs/puppetlabs-mount_providers.git'
 author 'Puppet Labs'
 license 'Apache License, Version 2.0'
