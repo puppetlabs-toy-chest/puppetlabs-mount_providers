@@ -20,7 +20,7 @@ class Puppet::Provider::Mountpoint < Puppet::Provider
     mount_with_options(resource[:device], resource[:name])
   end
 
-  def refresh
+  def handle_notification
     remount if resource[:ensure] == :present and exists?
   end
 

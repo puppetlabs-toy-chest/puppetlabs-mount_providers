@@ -72,4 +72,8 @@ See the discussion under the mounttab type for usage."
       end
     end
   end
+
+  def refresh
+    provider.handle_notification
+  end
 end
