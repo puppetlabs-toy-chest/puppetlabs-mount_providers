@@ -22,6 +22,13 @@ describe Puppet::Type.type(:mountpoint).provider(:solaris) do
     described_class.stubs(:suitable?).returns(true)
   end
 
+  describe "#handle_notification" do
+    it "handles refresh events sent to the type" do
+      resource.provider.expects(:handle_notification).once
+      resource.refresh
+    end
+  end
+
   describe "#exists?" do
     it "should be present if it is included in mount output" do
       provider.stubs(:mount).returns <<-MOUNT_OUTPUT.gsub(/^\s+/, '')
@@ -53,40 +60,6 @@ describe Puppet::Type.type(:mountpoint).provider(:solaris) do
       MOUNT_OUTPUT
 
       provider.should be_exists
-    end
-  end
-
-  describe "when refreshed" do
-    it "should remount if ensure is present and it is mounted" do
-      provider.stubs(:entry).returns(:name => "/mountdir", :device => "/device")
-      provider.expects(:remount)
-
-      provider.refresh
-    end
-
-    it "should not remount if ensure is present and it is unmounted" do
-      provider.stubs(:entry).returns(:name => nil, :device => nil)
-      provider.expects(:remount).never
-
-      provider.refresh
-    end
-
-    it "should not remount if ensure is absent" do
-      resource[:ensure] = :absent
-
-      provider.stubs(:entry).returns(:name => "/mountdir", :device => "/device")
-      provider.expects(:remount).never
-
-      provider.refresh
-    end
-
-    it "should use remount instead of unmount/mount if the resource supports it" do
-      resource[:remounts] = true
-
-      provider.stubs(:entry).returns(:name => "/mountdir", :device => "/device")
-      provider.expects(:mount).with {|*args| args.include? "remount"}
-
-      provider.refresh
     end
   end
 
