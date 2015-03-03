@@ -37,7 +37,7 @@ See the discussion under the mounttab type for usage."
     validate do |value|
       raise Puppet::Error, "name is not allowed to contain whitespace" if value =~ /\s/
       raise Puppet::Error, "name is not allowed to have trailing slashes" if value =~ %r{/$}
-      raise Puppet::Error, "name must be an absolute path" if value =~ %r{^[^/]} or value =~ %r{/../}
+      raise Puppet::Error, "name must be an absolute path" if value =~ %r{^[^/]} or value =~ %r{/\.\./}      
     end
   end
 
