@@ -1,5 +1,0 @@
-0.0.2 2012-10-10 - Jeff McCune <jeff@puppetlabs.com>
-* (#3530) Fix mountpoint; make it refreshable
-
-0.0.1 2012-04-18 - Jeff McCune <jeff@puppetlabs.com>
-* Initial Release
