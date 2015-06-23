@@ -2,7 +2,7 @@ require 'puppet/property/list'
 require 'puppet/provider/parsedfile'
 
 module Puppet
-  newtype(:mounttab) do
+  Type.newtype(:mounttab) do
     @doc = "Manages entries in the filesystem table. This is usually, but not
 necessarily, used in conjunction with the mountpoint type to manage both the
 current-running state of mounts (mountpoint) with the fstab entries which load
