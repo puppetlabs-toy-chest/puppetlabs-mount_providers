@@ -5,7 +5,19 @@ See the discussion under the mounttab type for usage."
   feature :refreshable, "The provider can remount the filesystem.",
     :methods => [:remount]
 
-  ensurable
+  ensurable do
+    newvalue(:present, :invalidate_refreshes => true) do
+      unless provider.exists?
+        provider.create
+      end
+    end
+
+    newvalue(:absent) do
+      if provider.exists?
+        provider.destroy
+      end
+    end
+  end
 
   newproperty(:device) do
     desc "The device providing the mount.  This can be whatever
