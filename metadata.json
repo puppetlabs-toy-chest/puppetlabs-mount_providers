@@ -1,6 +1,6 @@
 {
   "name": "puppetlabs-mount_providers",
-  "version": "0.0.3",
+  "version": "1.0.0",
   "author": "Puppet Labs",
   "summary": "Provides the mounttab and mountpoint resource types.",
   "license": "Apache-2.0",
@@ -8,7 +8,6 @@
   "project_page": "https://github.com/puppetlabs/puppetlabs-mount_providers",
   "issues_url": "https://tickets.puppetlabs.com/browse/MODULES",
   "dependencies": [
-  
   ],
   "operatingsystem_support": [
     {
@@ -76,12 +75,8 @@
   ],
   "requirements": [
     {
-      "name": "pe",
-      "version_requirement": "3.x"
-    },
-    {
       "name": "puppet",
-      "version_requirement": ">= 2.7.0 < 5.0.0"
+      "version_requirement": ">= 4.0.0 < 5.0.0"
     }
   ]
 }
