@@ -1,3 +1,7 @@
+## 2019-03-19 - Release 2.0.0
+### Changed
+- (MODULES-8043) Update supported Puppet versions [\#17](https://github.com/puppetlabs/puppetlabs-mount_providers/pull/17) ([eimlav](https://github.com/eimlav))
+
 ## 2017-01-27 - Release 1.0.0
 ### Bugfixes
 - Sets `ensure` on the `mountpoint` type to invalidate refreshes
