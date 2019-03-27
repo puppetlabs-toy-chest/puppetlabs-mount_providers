@@ -1,3 +1,7 @@
+## 2019-03-27 - Release 2.0.1
+### Bugfixes
+- (MODULES-8818) Improve Anubis score [\#20](https://github.com/puppetlabs/puppetlabs-mount_providers/pull/20) ([eimlav](https://github.com/eimlav))
+
 ## 2019-03-19 - Release 2.0.0
 ### Changed
 - (MODULES-8043) Update supported Puppet versions [\#17](https://github.com/puppetlabs/puppetlabs-mount_providers/pull/17) ([eimlav](https://github.com/eimlav))
