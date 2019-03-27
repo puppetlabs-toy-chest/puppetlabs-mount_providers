@@ -3,7 +3,7 @@
 # Class names need to match module names for the autoloader to find them.
 class mount_providers {
   mount_providers::do { '/mnt/export':
-    device => 'master:/export',
+    device  => 'master:/export',
     options => ['ro','hard'],
   }
 
